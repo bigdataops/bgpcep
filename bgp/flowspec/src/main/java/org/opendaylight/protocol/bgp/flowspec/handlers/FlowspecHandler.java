@@ -8,7 +8,7 @@
 package org.opendaylight.protocol.bgp.flowspec.spi.handlers;
 
 import io.netty.buffer.ByteBuf;
-import org.opendaylight.protocol.bgp.flowspec.impl.registry.FlowspecTypeRegistry;
+import org.opendaylight.protocol.bgp.flowspec.FlowspecTypeRegistry;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.Flowspec;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.FlowspecBuilder;
 

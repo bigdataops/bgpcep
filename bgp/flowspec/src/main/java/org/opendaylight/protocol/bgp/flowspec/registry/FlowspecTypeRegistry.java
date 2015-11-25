@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec.impl.registry;
+package org.opendaylight.protocol.bgp.flowspec;
 
 import io.netty.buffer.ByteBuf;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeParser;
@@ -23,12 +23,19 @@ public class FlowspecTypeRegistry {
 
     public void serializeFlowspecType(final FlowspecType fsType, final ByteBuf output) {
         final FlowspecTypeSerializer serializer = this.handlers.getSerializer(fsType.getImplementedInterface());
+        if (serializer == null) {
+            LOG.warn("serializer for flowspec type {} is not registered.", fsType);
+        }
         serializer.serializeType(fsType, output);
     }
 
     public FlowspecType parseFlowspecType(ByteBuf buffer) {
         final short type = buffer.readUnsignedByte();
         final FlowspecTypeParser parser = this.handlers.getParser(type);
+        if (parser == null) {
+            LOG.warn("parser for flowspec type {} is not registered.", type);
+            return null;
+        }
         return parser.parseType(buffer);
     }
 
