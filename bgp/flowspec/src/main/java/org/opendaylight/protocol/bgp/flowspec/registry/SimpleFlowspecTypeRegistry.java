@@ -17,8 +17,10 @@ import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FlowspecTypeRegistry {
-    private static final Logger LOG = LoggerFactory.getLogger(FlowspecTypeRegistry.class);
+public class SimpleFlowspecTypeRegistry {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleFlowspecTypeRegistry.class);
+
     private final HandlerRegistry<DataContainer, FlowspecTypeParser, FlowspecTypeSerializer> handlers = new HandlerRegistry<>();
 
     public void serializeFlowspecType(final FlowspecType fsType, final ByteBuf output) {

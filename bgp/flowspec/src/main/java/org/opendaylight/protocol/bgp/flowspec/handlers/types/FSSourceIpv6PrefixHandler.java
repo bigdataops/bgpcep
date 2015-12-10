@@ -28,7 +28,9 @@ public final class FSSourceIpv6PrefixHandler implements FlowspecTypeParser, Flow
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == SOURCE_PREFIX_VALUE, "Source prefix type does not match!");
+        if (buffer == null) {
+            return null;
+        }
         return new SourceIpv6PrefixCaseBuilder().setSourcePrefix(Ipv6Util.prefixForByteBuf(buffer)).build();
     }
 }

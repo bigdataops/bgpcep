@@ -28,6 +28,9 @@ public final class FSIpv6NextHeaderHandler implements FlowspecTypeParser, Flowsp
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
+        if (buffer == null) {
+            return null;
+        }
         return new NextHeaderCaseBuilder().setNextHeaders(parseNextHeader(buffer)).build();
     }
 

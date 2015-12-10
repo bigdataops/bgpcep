@@ -32,7 +32,9 @@ public final class FSDscpsHandler implements FlowspecTypeParser, FlowspecTypeSer
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == DSCP_VALUE, "Destination prefix type does not match!");
+        if (buffer == null) {
+            return null;
+        }
         return new DscpCaseBuilder().setDscps(parseDscps(buffer)).build();
     }
 

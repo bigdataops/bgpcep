@@ -11,37 +11,40 @@ import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.protocol.bgp.flowspec.NumericOneByteOperandParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeSerializer;
 import org.opendaylight.protocol.util.ByteArray;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.NumericOperand;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.FlowspecType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.DestinationPortCase;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.DestinationPortCaseBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.destination.port._case.DestinationPorts;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.destination.port._case.DestinationPortsBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.PortCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.PortCaseBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.port._case.Ports;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.port._case.PortsBuilder;
 
-public final class FSDestinationPortHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    static final int DESTINATION_PORT_VALUE = 5;
+public final class FSPortHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
+    protected static final int PORT_VALUE = 4;
 
     @Override
     public void serializeType(FlowspecType fsType, ByteBuf output) {
-        Preconditions.checkArgument(fsType instanceof DestinationPortCase, "DestinationPortCase class is mandatory!");
-        output.writeByte(DESTINATION_PORT_VALUE);
-        NumericTwoByteOperandParser.INSTANCE.serialize(((DestinationPortCase) fsType).getDestinationPorts(), output);
+        Preconditions.checkArgument(fsType instanceof PortCase, "PortCase class is mandatory!");
+        output.writeByte(PORT_VALUE);
+        NumericTwoByteOperandParser.INSTANCE.serialize(((PortCase) fsType).getPorts(), output);
     }
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == DESTINATION_PORT_VALUE, "Destination port type does not match!");
-        return new DestinationPortCaseBuilder().setDestinationPorts(parseDestinationPort(buffer)).build();
+        if (buffer == null) {
+            return null;
+        }
+        return new PortCaseBuilder().setPorts(parsePort(buffer)).build();
     }
 
-    private static List<DestinationPorts> parseDestinationPort(final ByteBuf nlri) {
-        final List<DestinationPorts> ports = new ArrayList<>();
+    private static List<Ports> parsePort(final ByteBuf nlri) {
+        final List<Ports> ports = new ArrayList<>();
         boolean end = false;
         // we can do this as all fields will be rewritten in the cycle
-        final DestinationPortsBuilder builder = new DestinationPortsBuilder();
+        final PortsBuilder builder = new PortsBuilder();
         while (!end) {
             final byte b = nlri.readByte();
             final NumericOperand op = NumericOneByteOperandParser.INSTANCE.parse(b);

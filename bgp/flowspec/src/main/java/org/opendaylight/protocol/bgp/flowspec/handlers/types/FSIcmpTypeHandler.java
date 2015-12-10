@@ -16,40 +16,42 @@ import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeSerializer;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.NumericOperand;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.FlowspecType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpCodeCase;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpCodeCaseBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.icmp.code._case.Codes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.icmp.code._case.CodesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpTypeCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpTypeCaseBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.icmp.type._case.Types;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.icmp.type._case.TypesBuilder;
 
-public final class FSIcmpCodeHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    protected static final int ICMP_TYPE_VALUE = 8;
+public final class FSIcmpTypeHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
+    protected static final int ICMP_TYPE_VALUE = 7;
 
     @Override
     public void serializeType(FlowspecType fsType, ByteBuf output) {
-        Preconditions.checkArgument(fsType instanceof IcmpCodeCase, "IcmpCodeCase class is mandatory!");
+        Preconditions.checkArgument(fsType instanceof IcmpTypeCase, "IcmpTypeCase class is mandatory!");
         output.writeByte(ICMP_TYPE_VALUE);
-        NumericOneByteOperandParser.INSTANCE.serialize(((IcmpCodeCase) fsType).getCodes(), output);
+        NumericOneByteOperandParser.INSTANCE.serialize(((IcmpTypeCase) fsType).getTypes(), output);
     }
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == ICMP_TYPE_VALUE, "Destination prefix type does not match!");
-        return new IcmpCodeCaseBuilder().setCodes(parseIcmpCode(buffer)).build();
+        if (buffer == null) {
+            return null;
+        }
+        return new IcmpTypeCaseBuilder().setTypes(parseIcmpType(buffer)).build();
     }
 
-    private static List<Codes> parseIcmpCode(final ByteBuf nlri) {
-        final List<Codes> codes = new ArrayList<>();
+    private static List<Types> parseIcmpType(final ByteBuf nlri) {
+        final List<Types> icmps = new ArrayList<>();
         boolean end = false;
         // we can do this as all fields will be rewritten in the cycle
-        final CodesBuilder builder = new CodesBuilder();
+        final TypesBuilder builder = new TypesBuilder();
         while (!end) {
             final byte b = nlri.readByte();
             final NumericOperand op = NumericOneByteOperandParser.INSTANCE.parse(b);
             builder.setOp(op);
             builder.setValue(nlri.readUnsignedByte());
             end = op.isEndOfList();
-            codes.add(builder.build());
+            icmps.add(builder.build());
         }
-        return codes;
+        return icmps;
     }
 }

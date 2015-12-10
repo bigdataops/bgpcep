@@ -33,11 +33,13 @@ public final class FSPacketLengthHandler implements FlowspecTypeParser, Flowspec
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == PACKET_LENGTH_VALUE, "Destination port type does not match!");
-        return new PacketLengthCaseBuilder().setPacketLengths(parseDestinationPort(buffer)).build();
+        if (buffer == null) {
+            return null;
+        }
+        return new PacketLengthCaseBuilder().setPacketLengths(parsePacketLength(buffer)).build();
     }
 
-    private static List<PacketLengths> parseDestinationPort(final ByteBuf nlri) {
+    private static List<PacketLengths> parsePacketLength(final ByteBuf nlri) {
         final List<PacketLengths> packetLengths = new ArrayList<>();
         boolean end = false;
         // we can do this as all fields will be rewritten in the cycle

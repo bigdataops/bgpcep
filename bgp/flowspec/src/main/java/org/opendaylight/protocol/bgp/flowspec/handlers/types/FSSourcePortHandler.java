@@ -33,7 +33,9 @@ public final class FSSourcePortHandler implements FlowspecTypeParser, FlowspecTy
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == SOURCE_PORT_VALUE, "Destination port type does not match!");
+        if (buffer == null) {
+            return null;
+        }
         return new SourcePortCaseBuilder().setSourcePorts(parseDestinationPort(buffer)).build();
     }
 

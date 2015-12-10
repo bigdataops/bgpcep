@@ -10,7 +10,7 @@ package org.opendaylight.protocol.bgp.flowspec.api.handlers;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
-import org.opendaylight.protocol.bgp.flowspec.FlowspecTypeRegistry;
+import org.opendaylight.protocol.bgp.flowspec.SimpleFlowspecTypeRegistry;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecHandler;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.Flowspec;
 
@@ -18,7 +18,7 @@ public final class FSNlriHandler extends FlowspecHandler {
 
     protected static final int DESTINATION_PREFIX_VALUE = 1;
 
-    public FSNlriHandler(final FlowspecTypeRegistry registry) {
+    public FSNlriHandler(final SimpleFlowspecTypeRegistry registry) {
         super(registry);
     }
 

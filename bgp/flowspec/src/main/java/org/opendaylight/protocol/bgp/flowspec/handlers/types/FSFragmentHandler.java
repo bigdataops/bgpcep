@@ -42,7 +42,9 @@ public abstract class FSFragmentHandler implements FlowspecTypeParser, FlowspecT
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == FRAGMENT_VALUE, "Destination prefix type does not match!");
+        if (buffer == null) {
+            return null;
+        }
         return new FragmentCaseBuilder().setFragments(parseFragments(buffer)).build();
     }
 

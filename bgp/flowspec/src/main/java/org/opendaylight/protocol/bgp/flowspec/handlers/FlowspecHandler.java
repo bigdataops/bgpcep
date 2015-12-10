@@ -8,16 +8,16 @@
 package org.opendaylight.protocol.bgp.flowspec.spi.handlers;
 
 import io.netty.buffer.ByteBuf;
-import org.opendaylight.protocol.bgp.flowspec.FlowspecTypeRegistry;
+import org.opendaylight.protocol.bgp.flowspec.SimpleFlowspecTypeRegistry;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.Flowspec;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.FlowspecBuilder;
 
 
 public abstract class FlowspecHandler implements FlowspecParser, FlowspecSerializer {
 
-    private final FlowspecTypeRegistry fsTypeRegistry;
+    private final SimpleFlowspecTypeRegistry fsTypeRegistry;
 
-    public FlowspecHandler(final FlowspecTypeRegistry registry) {
+    public FlowspecHandler(final SimpleFlowspecTypeRegistry registry) {
         this.fsTypeRegistry = registry;
     }
 
