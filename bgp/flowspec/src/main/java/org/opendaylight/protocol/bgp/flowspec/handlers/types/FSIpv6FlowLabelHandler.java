@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec.handlers;
+package org.opendaylight.protocol.bgp.flowspec;
 
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
@@ -23,7 +23,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv6.flowspec.flowspec.type.flow.label._case.FlowLabelBuilder;
 
 public final class FSIpv6FlowLabelHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    static final int FLOW_LABEL_VALUE = 13;
+    public static final int FLOW_LABEL_VALUE = 13;
 
     @Override
     public void serializeType(FlowspecType fsType, ByteBuf output) {

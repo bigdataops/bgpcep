@@ -11,7 +11,6 @@ import io.netty.buffer.ByteBuf;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeSerializer;
 import org.opendaylight.protocol.concepts.HandlerRegistry;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.Flowspec;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.FlowspecType;
 import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class SimpleFlowspecTypeRegistry {
         return this.handlers.registerParser(type, parser);
     }
 
-    public AutoCloseable registerFlowspecTypeSerializer(final Class<? extends Flowspec> flowspec, final FlowspecTypeSerializer serializer) {
-        return this.handlers.registerSerializer(flowspec, serializer);
+    public AutoCloseable registerFlowspecTypeSerializer(final Class<? extends FlowspecType> typeClass, final FlowspecTypeSerializer serializer) {
+        return this.handlers.registerSerializer(typeClass, serializer);
     }
 }

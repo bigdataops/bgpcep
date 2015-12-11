@@ -9,29 +9,44 @@ package org.opendaylight.protocol.bgp.flowspec;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.protocol.bgp.flowspec.FSDestinationPortHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSDscpHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSIcmpCodeHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSIcmpTypeHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSIpProtocolHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSIpv6FlowLabelHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSIpv6NextHeaderHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSPacketLengthHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSPortHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSSourcePortHandler;
+import org.opendaylight.protocol.bgp.flowspec.FSTcpFlagsHandler;
 import org.opendaylight.protocol.bgp.flowspec.SimpleFlowspecExtensionProviderContext;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSDesinationPortHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSDscpHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIcmpCodeHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIcmpTypeHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpProtocolHandler;
 import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv4DestinationPrefixHandler;
 import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv4FragmentHandler;
 import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv4SourcePrefixHandler;
 import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6DestinationPrefixHandler;
+import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6FragmentHandler;
 import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6SourcePrefixHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6NextHeaderHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6FragmentHandler
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSIpv6FlowLabelHander;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSPacketLengthHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSPortHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSSourcePortHandler;
-import org.opendaylight.protocol.bgp.flowspec.handlers.FSTcpFlagsHandler;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.DestinationPortCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.DscpCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.FragmentCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpCodeCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.IcmpTypeCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.PacketLengthCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.PortCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.SourcePortCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.TcpFlagsCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv4.flowspec.flowspec.type.DestinationPrefixCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv4.flowspec.flowspec.type.ProtocolIpCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv4.flowspec.flowspec.type.SourcePrefixCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv6.flowspec.flowspec.type.DestinationIpv6PrefixCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv6.flowspec.flowspec.type.FlowLabelCase;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv6.flowspec.flowspec.type.NextHeaderCase;
 
 
 public final class FlowspecActivator {
 
-    public static List<AutoCloseable> startImpl(final SimpleFlowspecExtensionProviderContext context) {
+    public List<AutoCloseable> startImpl(final SimpleFlowspecExtensionProviderContext context) {
 
         final List<AutoCloseable> regs = new ArrayList<>();
         registerIpv4FlowspecTypeHandlers(regs, context);
@@ -40,12 +55,12 @@ public final class FlowspecActivator {
 
     protected void registerIpv4FlowspecTypeHandlers(final List<AutoCloseable> regs, SimpleFlowspecExtensionProviderContext context) {
 
-    	final FSIpv4DestinationPrefixHandler destinationPrefixHandler = new FSIpv4DestinationPrefixHandler();
-    	regs.add(context.registerFlowspecIpv4TypeParser(FSIpv4DestinationPrefixHandler.DESTINATION_PREFIX_VALUE, destinationPrefixHandler));
-    	regs.add(context.registerFlowspecIpv4TypeSerializer(DestinationPrefixCase.class, destinationPrefixHandler));
+        final FSIpv4DestinationPrefixHandler destinationPrefixHandler = new FSIpv4DestinationPrefixHandler();
+        regs.add(context.registerFlowspecIpv4TypeParser(FSIpv4DestinationPrefixHandler.DESTINATION_PREFIX_VALUE, destinationPrefixHandler));
+        regs.add(context.registerFlowspecIpv4TypeSerializer(DestinationPrefixCase.class, destinationPrefixHandler));
 
         final FSIpv4SourcePrefixHandler sourcePrefixHandler = new FSIpv4SourcePrefixHandler();
-        regs.add(context.registerFlowspecIpv4TypeParser(FSIpv4SourcePrefixHandler.SOURCE_PREFIX_VALUE, sourcePrefixHandler);
+        regs.add(context.registerFlowspecIpv4TypeParser(FSIpv4SourcePrefixHandler.SOURCE_PREFIX_VALUE, sourcePrefixHandler));
         regs.add(context.registerFlowspecIpv4TypeSerializer(SourcePrefixCase.class, sourcePrefixHandler));
 
         final FSIpProtocolHandler ipProtocolHandler = new FSIpProtocolHandler();
@@ -54,15 +69,15 @@ public final class FlowspecActivator {
 
         final FSPortHandler portHandler = new FSPortHandler();
         regs.add(context.registerFlowspecIpv4TypeParser(FSPortHandler.PORT_VALUE, portHandler));
-        regs.add(context.registerFlowspecIpv4TypeSerializer(PortCase.class, portHandler)));
+        regs.add(context.registerFlowspecIpv4TypeSerializer(PortCase.class, portHandler));
 
-        final FSDesinationPortHandler destinationPortHandler = new FSDesinationPortHandler();
-        regs.add(context.registerFlowspecIpv4TypeParser(FSDesinationPortHandler.DESTINATION_PORT_VALUE, destinationPortHandler));
+        final FSDestinationPortHandler destinationPortHandler = new FSDestinationPortHandler();
+        regs.add(context.registerFlowspecIpv4TypeParser(FSDestinationPortHandler.DESTINATION_PORT_VALUE, destinationPortHandler));
         regs.add(context.registerFlowspecIpv4TypeSerializer(DestinationPortCase.class, destinationPortHandler));
 
         final FSSourcePortHandler sourcePortHandler = new FSSourcePortHandler();
         regs.add(context.registerFlowspecIpv4TypeParser(FSSourcePortHandler.SOURCE_PORT_VALUE, sourcePortHandler));
-        regs.add(conexts.registerFlowspecIpv4TypeSerializer(SourcePortCase.class, sourcePortHandler));
+        regs.add(context.registerFlowspecIpv4TypeSerializer(SourcePortCase.class, sourcePortHandler));
 
         final FSIcmpTypeHandler icmpTypeHandler = new FSIcmpTypeHandler();
         regs.add(context.registerFlowspecIpv4TypeParser(FSIcmpTypeHandler.ICMP_TYPE_VALUE, icmpTypeHandler));
@@ -91,29 +106,29 @@ public final class FlowspecActivator {
 
     protected void registerIpv6FlowspecTypeHandlers(final List<AutoCloseable> regs, SimpleFlowspecExtensionProviderContext context) {
 
-    	final FSIpv6DestinationPrefixHandler destinationPrefixHandler = new FSIpv6DestinationPrefixHandler();
-    	regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6DestinationPrefixHandler.DESTINATION_PREFIX_VALUE, destinationPrefixHandler));
-    	regs.add(context.registerFlowspecIpv6TypeSerializer(DestinationIpv6PrefixCase.class, destinationPrefixHandler));
+        final FSIpv6DestinationPrefixHandler destinationPrefixHandler = new FSIpv6DestinationPrefixHandler();
+        regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6DestinationPrefixHandler.IPV6_DESTINATION_PREFIX_VALUE, destinationPrefixHandler));
+        regs.add(context.registerFlowspecIpv6TypeSerializer(DestinationIpv6PrefixCase.class, destinationPrefixHandler));
 
         final FSIpv6SourcePrefixHandler sourcePrefixHandler = new FSIpv6SourcePrefixHandler();
-        regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6SourcePrefixHandler.SOURCE_PREFIX_VALUE, sourcePrefixHandler);
+        regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6SourcePrefixHandler.SOURCE_PREFIX_VALUE, sourcePrefixHandler));
         regs.add(context.registerFlowspecIpv6TypeSerializer(SourcePrefixCase.class, sourcePrefixHandler));
 
         final FSIpv6NextHeaderHandler ipProtocolHandler = new FSIpv6NextHeaderHandler();
-        regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6NextHeaderHandler.IP_PROTOCOL_VALUE, ipProtocolHandler));
+        regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6NextHeaderHandler.NEXT_HEADER_VALUE, ipProtocolHandler));
         regs.add(context.registerFlowspecIpv6TypeSerializer(NextHeaderCase.class, ipProtocolHandler));
 
         final FSPortHandler portHandler = new FSPortHandler();
         regs.add(context.registerFlowspecIpv6TypeParser(FSPortHandler.PORT_VALUE, portHandler));
-        regs.add(context.registerFlowspecIpv6TypeSerializer(PortCase.class, portHandler)));
+        regs.add(context.registerFlowspecIpv6TypeSerializer(PortCase.class, portHandler));
 
-        final FSDesinationPortHandler destinationPortHandler = new FSDesinationPortHandler();
-        regs.add(context.registerFlowspecIpv6TypeParser(FSDesinationPortHandler.DESTINATION_PORT_VALUE, destinationPortHandler));
+        final FSDestinationPortHandler destinationPortHandler = new FSDestinationPortHandler();
+        regs.add(context.registerFlowspecIpv6TypeParser(FSDestinationPortHandler.DESTINATION_PORT_VALUE, destinationPortHandler));
         regs.add(context.registerFlowspecIpv6TypeSerializer(DestinationPortCase.class, destinationPortHandler));
 
         final FSSourcePortHandler sourcePortHandler = new FSSourcePortHandler();
         regs.add(context.registerFlowspecIpv6TypeParser(FSSourcePortHandler.SOURCE_PORT_VALUE, sourcePortHandler));
-        regs.add(conexts.registerFlowspecIpv6TypeSerializer(SourcePortCase.class, sourcePortHandler));
+        regs.add(context.registerFlowspecIpv6TypeSerializer(SourcePortCase.class, sourcePortHandler));
 
         final FSIcmpTypeHandler icmpTypeHandler = new FSIcmpTypeHandler();
         regs.add(context.registerFlowspecIpv6TypeParser(FSIcmpTypeHandler.ICMP_TYPE_VALUE, icmpTypeHandler));
@@ -139,8 +154,8 @@ public final class FlowspecActivator {
         regs.add(context.registerFlowspecIpv6TypeParser(FSIpv6FragmentHandler.FRAGMENT_VALUE, fragmentHandler));
         regs.add(context.registerFlowspecIpv6TypeSerializer(FragmentCase.class, fragmentHandler));
 
-        final FSIpv6FlowLabelHander flowlabelHander = new FSIpv6FlowLabelHander();
-        regs.add(context.registerFlowspecIpv4TypeParser(FSIpv6FlowLabelHander.FLOW_LABEL_VALUE, flowlabelHander));
-        regs.add(conext.registerFlowspecIpv6TypeSerializer(FlowLabelCase, flowlabelHander));
+        final FSIpv6FlowLabelHandler flowlabelHandler = new FSIpv6FlowLabelHandler();
+        regs.add(context.registerFlowspecIpv4TypeParser(FSIpv6FlowLabelHandler.FLOW_LABEL_VALUE, flowlabelHandler));
+        regs.add(context.registerFlowspecIpv6TypeSerializer(FlowLabelCase.class, flowlabelHandler));
     }
 }

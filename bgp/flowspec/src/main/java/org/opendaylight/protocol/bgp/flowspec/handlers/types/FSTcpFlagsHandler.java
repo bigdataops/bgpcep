@@ -5,14 +5,13 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec.handlers;
+package org.opendaylight.protocol.bgp.flowspec;
 
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.util.ArrayList;
 import java.util.List;
-import org.opendaylight.protocol.bgp.flowspec.BitmaskOperandParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeParser;
 import org.opendaylight.protocol.bgp.flowspec.spi.handlers.FlowspecTypeSerializer;
 import org.opendaylight.protocol.util.ByteArray;
@@ -24,7 +23,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.tcp.flags._case.TcpFlagsBuilder;
 
 public final class FSTcpFlagsHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    protected static final int TCP_FLAGS_VALUE = 9;
+    public static final int TCP_FLAGS_VALUE = 9;
 
     @Override
     public void serializeType(FlowspecType fsType, ByteBuf output) {

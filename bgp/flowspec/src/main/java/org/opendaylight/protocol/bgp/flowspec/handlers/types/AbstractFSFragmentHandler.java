@@ -24,8 +24,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 
 public abstract class AbstractFSFragmentHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
 
-    protected static final int FRAGMENT_VALUE = 12;
-    
+    public static final int FRAGMENT_VALUE = 12;
+
     protected static final int LAST_FRAGMENT = 4;
     protected static final int FIRST_FRAGMENT = 5;
     protected static final int IS_A_FRAGMENT = 6;

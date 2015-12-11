@@ -17,7 +17,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.ipv4.flowspec.flowspec.type.SourcePrefixCaseBuilder;
 
 public final class FSIpv4SourcePrefixHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    static final int SOURCE_PREFIX_VALUE = 2;
+    public static final int SOURCE_PREFIX_VALUE = 2;
 
     @Override
     public void serializeType(FlowspecType value, ByteBuf output) {
