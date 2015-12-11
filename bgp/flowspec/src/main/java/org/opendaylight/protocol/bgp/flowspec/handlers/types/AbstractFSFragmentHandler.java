@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec;
+package org.opendaylight.protocol.bgp.flowspec.handlers;
 
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
@@ -22,9 +22,10 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.fragment._case.Fragments;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.fragment._case.FragmentsBuilder;
 
-public abstract class FSFragmentHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
+public abstract class AbstractFSFragmentHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
 
     protected static final int FRAGMENT_VALUE = 12;
+    
     protected static final int LAST_FRAGMENT = 4;
     protected static final int FIRST_FRAGMENT = 5;
     protected static final int IS_A_FRAGMENT = 6;

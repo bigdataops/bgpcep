@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec;
+package org.opendaylight.protocol.bgp.flowspec.handlers;
 
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
@@ -22,12 +22,12 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flow
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.destination.flowspec.flowspec.type.icmp.code._case.CodesBuilder;
 
 public final class FSIcmpCodeHandler implements FlowspecTypeParser, FlowspecTypeSerializer {
-    protected static final int ICMP_TYPE_VALUE = 8;
+    protected static final int ICMP_CODE_VALUE = 8;
 
     @Override
     public void serializeType(FlowspecType fsType, ByteBuf output) {
         Preconditions.checkArgument(fsType instanceof IcmpCodeCase, "IcmpCodeCase class is mandatory!");
-        output.writeByte(ICMP_TYPE_VALUE);
+        output.writeByte(ICMP_CODE_VALUE);
         NumericOneByteOperandParser.INSTANCE.serialize(((IcmpCodeCase) fsType).getCodes(), output);
     }
 

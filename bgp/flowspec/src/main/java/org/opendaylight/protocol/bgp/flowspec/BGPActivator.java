@@ -9,6 +9,7 @@ package org.opendaylight.protocol.bgp.flowspec;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.protocol.bgp.flowspec.SimpleFlowspecTypeRegistry;
 import org.opendaylight.protocol.bgp.flowspec.extended.communities.RedirectAsTwoOctetEcHandler;
 import org.opendaylight.protocol.bgp.flowspec.extended.communities.TrafficActionEcHandler;
 import org.opendaylight.protocol.bgp.flowspec.extended.communities.TrafficMarkingEcHandler;
@@ -38,6 +39,12 @@ public final class BGPActivator extends AbstractBGPExtensionProviderActivator {
         final List<AutoCloseable> regs = new ArrayList<>();
 
         regs.add(context.registerSubsequentAddressFamily(FlowspecSubsequentAddressFamily.class, FLOWSPEC_SAFI));
+
+        flowspecContext = new SimpleFlowspecExtensionProviderContext();
+        FlowspecActivator.startImpl(flowspecContext);
+
+        final SimpleFlowspecIpv4NlriParser fsIpv4Handler = new SimpleFlowspecIpv4NlriParser(flowspecContext.getFlowspecIpv4TypeRegistry());
+        final SimpleFlowspecIpv4NlriParser fsIpv6Handler = new SimpleFlowspecIpv6NlriParser(flowspecContext.getFlowspecIpv6TypeRegistry());
 
         final FSIpv4NlriParser ipv4Handler = new FSIpv4NlriParser();
         final FSIpv6NlriParser ipv6Handler = new FSIpv6NlriParser();

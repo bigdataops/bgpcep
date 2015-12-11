@@ -10,5 +10,32 @@ package org.opendaylight.protocol.bgp.flowspec;
 import org.opendaylight.protocol.bgp.flowspec.SimpleFlowspecTypeRegistry;
 
 public class SimpleFlowspecExtensionProviderContext {
-    private final SimpleFlowspecTypeRegistry flowspecTypeRegistry = new SimpleFlowspecTypeRegistry();
+
+    private final SimpleFlowspecTypeRegistry flowspecIpv4TypeRegistry = new SimpleFlowspecTypeRegistry();
+
+    private final SimpleFlowspecTypeRegistry flowspecIpv6TypeRegistry = new SimpleFlowspecTypeRegistry();
+
+    public AutoClosealbe registerFlowspecIpv4TypeParser(final int type, final FlowspecTypeParser parser) {
+    	this.flowspecIpv4TypeRegistry.registerFlowspecTypeParser(type, parser);
+    }
+
+    public AutoClosealbe registerFlowspecIpv4TypeSerializer(final FlowspecType typeClass, final FlowspecTypeSerializer serializer) {
+    	this.flowspecIpv4TypeRegistry.registerFlowspecTypeSerializer(typeClass, serializer);
+    }
+
+    public AutoClosealbe registerFlowspecIpv6TypeParser(final int type, final FlowspecTypeParser parser) {
+    	this.flowspecIpv6TypeRegistry.registerFlowspecTypeParser(type, parser);
+    }
+
+    public AutoClosealbe registerFlowspecIpv46ypeSerializer(final FlowspecType typeClass, final FlowspecTypeSerializer serializer) {
+    	this.flowspecIpv6TypeRegistry.registerFlowspecTypeSerializer(typeClass, serializer);
+    }
+
+    public SimpleFlowspecTypeRegistry getFlowspecIpv4TypeRegistry() {
+    	return this.flowspecIpv4TypeRegistry;
+    }
+
+    public SimpleFlowspecTypeRegistry getFlowspecIpv6TypeRegistry() {
+    	return this.flowspecIpv6TypeRegistry;
+    }    
 }

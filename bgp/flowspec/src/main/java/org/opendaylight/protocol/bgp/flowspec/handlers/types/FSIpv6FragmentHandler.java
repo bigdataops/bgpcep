@@ -5,12 +5,12 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.protocol.bgp.flowspec;
+package org.opendaylight.protocol.bgp.flowspec.handlers;
 
 import org.opendaylight.protocol.util.BitArray;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.Fragment;
 
-public class FSIpv6FragmentHandler extends FSFragmentHandler {
+public class FSIpv6FragmentHandler extends AbstractFSFragmentHandler {
 
     @Override
     protected final Fragment parseFragment(final byte fragment) {
