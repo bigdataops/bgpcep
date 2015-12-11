@@ -33,19 +33,20 @@ public final class BGPActivator extends AbstractBGPExtensionProviderActivator {
 
     private static final int FLOWSPEC_SAFI = 133;
 
+    private final FlowspecActivator fsActivator = new FlowspecActivator();
+    private final SimpleFlowspecExtensionProviderContext flowspecContext = new SimpleFlowspecExtensionProviderContext();
+
     @Override
     protected List<AutoCloseable> startImpl(final BGPExtensionProviderContext context) {
+
         final List<AutoCloseable> regs = new ArrayList<>();
+
+        this.fsActivator.start(this.flowspecContext);
 
         regs.add(context.registerSubsequentAddressFamily(FlowspecSubsequentAddressFamily.class, FLOWSPEC_SAFI));
 
-        final SimpleFlowspecExtensionProviderContext flowspecContext = new SimpleFlowspecExtensionProviderContext();
-        final FlowspecActivator fsActivator = new FlowspecActivator();
-
-        fsActivator.startImpl(flowspecContext);
-
-        final SimpleFlowspecIpv4NlriParser fsIpv4Handler = new SimpleFlowspecIpv4NlriParser(flowspecContext.getFlowspecIpv4TypeRegistry());
-        final SimpleFlowspecIpv6NlriParser fsIpv6Handler = new SimpleFlowspecIpv6NlriParser(flowspecContext.getFlowspecIpv6TypeRegistry());
+        final SimpleFlowspecIpv4NlriParser fsIpv4Handler = new SimpleFlowspecIpv4NlriParser(this.flowspecContext.getFlowspecIpv4TypeRegistry());
+        final SimpleFlowspecIpv6NlriParser fsIpv6Handler = new SimpleFlowspecIpv6NlriParser(this.flowspecContext.getFlowspecIpv6TypeRegistry());
 
         final FSIpv4NlriParser ipv4Handler = new FSIpv4NlriParser();
         final FSIpv6NlriParser ipv6Handler = new FSIpv6NlriParser();
@@ -79,5 +80,9 @@ public final class BGPActivator extends AbstractBGPExtensionProviderActivator {
         regs.add(context.registerExtendedCommunitySerializer(org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.bgp.flowspec.rev150807.flowspec.ipv6.routes.flowspec.ipv6.routes.flowspec.route.attributes.extended.communities.extended.community.TrafficRateExtendedCommunityCase.class, trafficRateEcHandler));
 
         return regs;
+    }
+
+    public void stopFlowspecActivator() {
+        this.fsActivator.stop();
     }
 }
