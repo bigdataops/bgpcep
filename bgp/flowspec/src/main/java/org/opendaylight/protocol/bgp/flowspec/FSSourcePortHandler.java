@@ -36,10 +36,10 @@ public final class FSSourcePortHandler implements FlowspecTypeParser, FlowspecTy
         if (buffer == null) {
             return null;
         }
-        return new SourcePortCaseBuilder().setSourcePorts(parseDestinationPort(buffer)).build();
+        return new SourcePortCaseBuilder().setSourcePorts(parseSourcePort(buffer)).build();
     }
 
-    private static List<SourcePorts> parseDestinationPort(final ByteBuf nlri) {
+    private static List<SourcePorts> parseSourcePort(final ByteBuf nlri) {
         final List<SourcePorts> ports = new ArrayList<>();
         boolean end = false;
         // we can do this as all fields will be rewritten in the cycle

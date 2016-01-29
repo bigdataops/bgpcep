@@ -109,6 +109,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>bgp-bmp-api</artifactId>
         </dependency>
+         <dependency>
+             <groupId>junit</groupId>
+             <artifactId>junit</artifactId>
+         </dependency>
          <!-- test scope dependencies -->
         <dependency>
             <groupId>org.opendaylight.controller</groupId>

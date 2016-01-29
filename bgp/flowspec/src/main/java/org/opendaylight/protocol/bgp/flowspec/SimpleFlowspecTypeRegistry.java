@@ -22,6 +22,10 @@ public class SimpleFlowspecTypeRegistry {
 
     private final HandlerRegistry<DataContainer, FlowspecTypeParser, FlowspecTypeSerializer> handlers = new HandlerRegistry<>();
 
+    public FlowspecTypeParser getFlowspecTypeParser(final short type) {
+        return this.handlers.getParser(type);
+    }
+
     public void serializeFlowspecType(final FlowspecType fsType, final ByteBuf output) {
         final FlowspecTypeSerializer serializer = this.handlers.getSerializer(fsType.getImplementedInterface());
         if (serializer == null) {

@@ -54,6 +54,7 @@ public final class FlowspecActivator implements AutoCloseable {
 
         final List<AutoCloseable> regs = new ArrayList<>();
         registerIpv4FlowspecTypeHandlers(regs, context);
+        registerIpv6FlowspecTypeHandlers(regs, context);
     }
 
     protected void registerIpv4FlowspecTypeHandlers(final List<AutoCloseable> regs, SimpleFlowspecExtensionProviderContext context) {

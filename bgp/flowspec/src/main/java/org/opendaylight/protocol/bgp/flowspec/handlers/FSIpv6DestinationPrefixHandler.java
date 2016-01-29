@@ -31,14 +31,13 @@ public final class FSIpv6DestinationPrefixHandler implements FlowspecTypeParser,
 
     @Override
     public FlowspecType parseType(ByteBuf buffer) {
-        Preconditions.checkArgument(((int) buffer.readUnsignedByte()) == IPV6_DESTINATION_PREFIX_VALUE, "Destination prefix type does not match!");
         return new DestinationIpv6PrefixCaseBuilder().setDestinationPrefix(parseIpv6Prefix(buffer)).build();
     }
 
     private static Ipv6Prefix parseIpv6Prefix(final ByteBuf nlri) {
-        final int bitLength = nlri.readByte();
-        final int offset = nlri.readByte();
-        nlri.readBytes(offset);
+        final int bitLength = nlri.readUnsignedByte();
+        nlri.readUnsignedByte();
+        Preconditions.checkArgument(bitLength > 30, "bytes wrong");
         return Ipv6Util.prefixForBytes(ByteArray.readBytes(nlri, bitLength / Byte.SIZE), bitLength);
     }
 
